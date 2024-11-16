@@ -1,0 +1,90 @@
+/* Style for the map container */
+.mapContainer {
+    height: 600px;
+    width: 100%;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+  }
+  
+  /* Add custom class for marker icon styling */
+  .custom-icon {
+    border: 20px solid white;
+    border-radius: 1.5em; /* Make the icon round */
+    padding: 5px; /* Add padding to the icon */
+    background-color: transparent;
+  }
+  
+  .customPopup {
+    font-family: Arial, sans-serif;
+    color: #333;
+    text-align: center;
+  }
+  
+  .customPopup h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #2a9d8f;
+  }
+  
+  .locationImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+ 
+   /* Floating destination list positioned over the map */
+   .destination-list {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    max-height: 90%;
+    overflow-y: auto;
+    width: 250px;
+    z-index: 1000; /* Ensure it's on top of the map */
+  }
+  
+  .destination-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .destination-list li {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+  }
+  
+  .destination-list li strong {
+    font-size: 1.1em;
+    color: #2a9d8f;
+  }
+ 
+   
+  /* Floating stop number styling */
+.stopNumber {
+    position: absolute;
+    top: -15px; /* Adjust position above the marker */
+    left: 50%; /* Center the number horizontally */
+    transform: translateX(-50%);
+    background-color: #2a9d8f;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+  }
+  
