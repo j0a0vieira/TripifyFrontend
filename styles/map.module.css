@@ -1,19 +1,15 @@
 /* Style for the map container */
 .mapContainer {
-    height: 600px;
+    min-height: 900px;
     width: 100%;
-    border: 2px solid #4CAF50;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
+    padding: 0;
+    margin: 0;
   }
   
   /* Add custom class for marker icon styling */
-  .custom-icon {
-    border: 20px solid white;
-    border-radius: 1.5em; /* Make the icon round */
-    padding: 5px; /* Add padding to the icon */
-    background-color: transparent;
+  .customIcon {
+    border: 2px solid white;
+    border-radius: 50%; /* Makes it round */
   }
   
   .customPopup {
@@ -37,54 +33,74 @@
   }
  
    /* Floating destination list positioned over the map */
-   .destination-list {
+   .destinationList {
     position: absolute;
-    top: 5%;
-    right: 5%;
+    top: 50px;
+    right: 50px;
+    width: 20%;
+    max-height: 60%; 
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+    padding: 15px 15px 5px 15px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    max-height: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
     overflow-y: auto;
-    width: 250px;
-    z-index: 1000; /* Ensure it's on top of the map */
+    z-index: 2000; /* Ensure it's on top of the map */
+  }
+  .roadtripInfo {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    width: 30%;
+    max-height: 20%; 
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 15px 5px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    overflow-y: auto;
+    z-index: 2000; /* Ensure it's on top of the map */
   }
   
-  .destination-list ul {
+  .destinationList ul, .roadtripInfo ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
   
-  .destination-list li {
+  .destinationList li, .roadtripInfo li {
     margin-bottom: 10px;
-    font-size: 0.9em;
+    font-size: 1.2em;
   }
   
-  .destination-list li strong {
+  .destinationList li strong, .roadtripInfo li strong {
     font-size: 1.1em;
     color: #2a9d8f;
   }
- 
-   
-  /* Floating stop number styling */
-.stopNumber {
-    position: absolute;
-    top: -15px; /* Adjust position above the marker */
-    left: 50%; /* Center the number horizontally */
-    transform: translateX(-50%);
-    background-color: #2a9d8f;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2em;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    z-index: 2000;
-  }
+
+  /* Style for destination buttons */
+.destinationButton, .roadtripButton {
+  background-color: #2a9d8f;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.destinationButtonText, .roadtripButtonText {
+  color: white  !important;
+}
+
+.destinationButton:hover, .roadtripButton:hover {
+  background-color: #21867a;
+}
+
+.marker {
+  position: relative; /* Allows absolute positioning for the stop number */
+}
+
+
+
   
