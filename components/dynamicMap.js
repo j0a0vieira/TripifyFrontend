@@ -34,15 +34,15 @@ const DynamicMap = ({ locations }) => {
   const center = locations && locations.length ? [locations[0].latitude, locations[0].longitude] : defaultCenter;
   const zoom = locations && locations.length ? 12 : 6;
 
-  const createIcon = (iconUrl, stopNumber) => {
+  const createIcon = (stopNumber) => {
     return L.divIcon({
       className: styles.customIcon,
       html: `
-        <div style=" width: 61px; height: 61px; background-image: url(${iconUrl}); background-size: cover; background-position: center; border-radius: 50%">
+        <div style=" width: 47px; height: 47px; background-image: url(./point.png); background-size: cover; background-position: center; border-radius: 50%">
           <h1 style="position: absolute; width: 30px; height: 30px; align-content: center; text-align: center; top: -10px; left: 95%; transform: translateX(-50%); color: white; font-size: 16px; font-weight: bold; margin: 0; background-color: #2a9d8f; border-radius: 50%">${stopNumber}</h1>
         </div>
       `,
-      iconSize: [65, 65], // Adjust the icon size
+      iconSize: [50, 50], // Adjust the icon size
       iconAnchor: [25, 50], // Anchor the icon's bottom center
       popupAnchor: [0, -40], // Adjust the position of the popup
     });
@@ -60,14 +60,13 @@ const DynamicMap = ({ locations }) => {
         <Marker
           key={index}
           position={[location.latitude, location.longitude]}
-          icon={createIcon(location.iconUrl, location.pos)}
+          icon={createIcon(index+1)}
         >
           <Popup className={styles.customPopup}>
             <div>
               <h3>{location.name}</h3>
-              <img src={location.image} alt={location.name} className={styles.locationImage} />
-              <h6><strong>{location.description}</strong></h6>
-              <p><strong>Info:</strong> {location.additionalInfo}</p>
+              <img src="./background.png" alt={location.name} className={styles.locationImage} />
+              {location.formattedAddress && <p><strong>Endereço:</strong> {location.formattedAddress}</p>}
             </div>
           </Popup>
 
@@ -76,17 +75,6 @@ const DynamicMap = ({ locations }) => {
           </div>
         </Marker>
       ))}
-
-      {/* Render the destination list outside the Marker loop */}
-      <div className={styles.roadtripInfo}>
-        <h3>RoadTrip Name</h3>
-        <div className='d-flex flex-wrap justify-content-between'>
-        <h6><strong className='text-muted'> {locations[0].name} - {locations[locations.length-1].name}</strong></h6>|
-        <h6><strong className='text-muted'>xxx kms</strong></h6>|
-        <h6><strong className='text-muted'>hh:mm a conduzir</strong></h6>|
-        <h6><strong className='text-muted'>{locations.length} paragens </strong></h6>
-        </div>
-      </div>
 
       <div className={styles.destinationList}>
         <h2>RoadTrip List</h2>
