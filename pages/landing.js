@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import dynamic from 'next/dynamic';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React from 'react';
 import Categories from "../components/Categories";
+import useFetchTripRoute from '../utils/useFetchTripRoute';
+import TextBoxComponent from '../components/inputTags';
 
 // Dynamically import MapContainer to ensure it's only loaded client-side
 const MapContainer = dynamic(
@@ -21,30 +23,19 @@ const TileLayer = dynamic(
 
 export default function TripifyLanding() {
   const [formData, setFormData] = useState({
-    startDate: null,
-    endDate: null,
-    tripDuration: '',
-    maxDistance: '',
-    preferredActivities: '',
-    withHotel: false,
-    travelMode: 'car',
-    startLocation: '',
-    endLocation: '',
-    targetGroup: '',
-    mandatoryToVisit: '',
-    budget: 'medium'
+    StartingLat: 0,
+    StartingLon: 0,
+    DestinationLat: 0,
+    DestinationLon: 0,
+    StartDate: '',
+    EndDate: '',
+    Categories: [],
+    MandatoryToVisit: [],
+    BackHome: false,
   });
 
+  const { tripInfo, loading, error } = useFetchTripRoute(formData);
   
-  // Update trip duration based on start and end dates
-  useEffect(() => {
-    if (formData.startDate && formData.endDate) {
-      const diffTime = Math.abs(formData.endDate - formData.startDate);
-      const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-      setFormData((prevData) => ({ ...prevData, tripDuration: diffHours }));
-    }
-  }, [formData.startDate, formData.endDate]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -53,14 +44,28 @@ export default function TripifyLanding() {
     });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('User Preferences:', formData);
+    // No need to call fetchTripRoute here since it's already handled by the hook
+    console.log("form data: " + tripInfo);
   };
 
   // Function to update the preferredActivities from the Categories component
   const handleCategoryChange = (selectedCategories) => {
-    setFormData({ ...formData, preferredActivities: selectedCategories });
+    setFormData({ ...formData, Categories: selectedCategories });
+  };
+
+  // Function to update the mandatoryToVisit from the TextBoxComponent component
+  const handleMandatoriesChange = (selectedMandatories) => {
+    setFormData({ ...formData, MandatoryToVisit: selectedMandatories });
+  };
+
+  // Function to update the backHome from the checkbox
+  const handleBachHomeChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({ ...formData, BackHome: checked });
   };
 
   const CustomDateButton = React.forwardRef(({ value, onClick, defaultText}, ref) => (
@@ -85,12 +90,14 @@ export default function TripifyLanding() {
   const setLocation = (lat, lon) => {
     if (type === 'start') {
       setStartingPoint([lat, lon]);
+      setFormData({ ...formData, StartingLat: lat, StartingLon: lon });
       reverseGeocode(lat, lon).then((locality) => {
         setButtonStartText(locality);
       });
       lockMap();
     } else {
       setDestinationPoint([lat, lon]);
+      setFormData({ ...formData, DestinationLat: lat, DestinationLon: lon });
       reverseGeocode(lat, lon).then((locality) => {
          setButtonDestinationText(locality);
       });
@@ -141,7 +148,6 @@ export default function TripifyLanding() {
   }
 
   const reverseGeocode = async (lat, lng) => {
-    const accessToken = 'your-mapbox-access-token'; // Replace with your Mapbox access token
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=pk.eyJ1IjoiZGlvZ29sZW9uYXJkbyIsImEiOiJjbTNrcnZsMDEwaW9iMmxwZW1mZDhybnRzIn0.o3zaq7mYrcXG3bgiGMORdg`;
   
     try {
@@ -181,15 +187,15 @@ export default function TripifyLanding() {
             <h5>I want to travel...</h5>
             <div style={styles.inputGroupBtns}>
             <DatePicker
-              selected={formData.startDate}
-              onChange={(date) => setFormData({ ...formData, startDate: date })}
+              selected={formData.StartDate}
+              onChange={(date) => setFormData({ ...formData, StartDate: date })}
               dateFormat="dd/MM/yyyy"
               placeholderText="Selecione a data de início"
               customInput={<CustomDateButton defaultText="From" />}
             />
             <DatePicker
-              selected={formData.endDate}
-              onChange={(date) => setFormData({ ...formData, endDate: date })}
+              selected={formData.EndDate}
+              onChange={(date) => setFormData({ ...formData, EndDate: date })}
               dateFormat="dd/MM/yyyy"
               placeholderText="Selecione a data de Fim"
               customInput={<CustomDateButton defaultText="To"/>}
@@ -212,24 +218,14 @@ export default function TripifyLanding() {
             {/* Use Categories component and pass the category change handler */}
           <Categories onCategoryChange={handleCategoryChange} />
           </div>
-          <div style={styles.inputGroup}>
-          <h5>I'm traveling with...</h5>
-            <select
-              name="targetGroup"
-              value={formData.targetGroup}
-              onChange={handleChange}
-              style={styles.select}
-            >
-              <option value="">Selecione...</option>
-              <option value="family">Family</option>
-              <option value="friends">Firends</option>
-              <option value="couple">Couple</option>
-              <option value="alone">Alone</option>
-            </select>
+          <h5>It's mandatory to visit...</h5>
+          <TextBoxComponent onMandatoriesChange={handleMandatoriesChange} />
+          <div class="d-flex">
+            <input type="checkbox" name="backToStart" value={formData.BackHome} onChange={handleBachHomeChange} class="me-2" style={{width: "1.2rem"}} /> 
+            <h6 class="mb-1" style={styles.label}>Finish my trip at the starting point?</h6>
           </div>
-          
-          <button type="submit" style={styles.button}>
-            Build My Trip
+          <button type="submit" style={styles.button2} disabled={loading}>
+            {loading ? 'Loading...' : 'Submit'}
           </button>
         </form>
       </div>

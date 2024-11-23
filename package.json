@@ -16,8 +16,12 @@
     "react": "19.0.0-rc-66855b96-20241106",
     "react-bootstrap": "^2.10.5",
     "react-datepicker": "^7.5.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-leaflet": "^4.2.1",
+    "react-select": "^5.8.3",
+    "react-tag-input": "^6.10.3",
     "sass": "^1.81.0"
   },
   "devDependencies": {

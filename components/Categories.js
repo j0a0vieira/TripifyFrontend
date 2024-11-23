@@ -1,29 +1,28 @@
-// Categories.js
 import React, { useState } from 'react';
 import useFetchCategories from '../utils/useFetchCategories'; // Import the custom hook
+import Select from 'react-select'; // Import react-select
 
-const Categories = () => {
+const Categories = ({}) => {
   const [formData, setFormData] = useState({
-    startDate: null,
-    endDate: null,
-    tripDuration: '',
-    maxDistance: '',
-    preferredActivities: [], // Now an array to hold the fetched categories
-    withHotel: false,
-    travelMode: 'car',
-    startLocation: '',
-    endLocation: '',
-    targetGroup: '',
-    mandatoryToVisit: '',
-    budget: 'medium'
+    preferredActivities: [], // This will hold the IDs of selected categories
   });
 
   // Use the custom hook to fetch categories
   const { categories, loading, error } = useFetchCategories();
 
-  // Update formData when the preferredActivities change
-  const handleCategoryChange = (selectedCategories) => {
-    setFormData({ ...formData, preferredActivities: selectedCategories });
+  // Map categories to the format needed by react-select
+  const categoryOptions = categories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+
+  // Handle changes in selected options
+  const handleSelectChange = (selectedOptions) => {
+    const selectedCategories = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    setFormData((prevData) => ({
+      ...prevData,
+      preferredActivities: selectedCategories,
+    }));
   };
 
   if (loading) return <div>Loading categories...</div>;
@@ -31,23 +30,16 @@ const Categories = () => {
 
   return (
     <div>
-      {/* Example dropdown to select categories */}
-      <label htmlFor="preferredActivities">Preferred Activities:</label>
-      <select
-        id="preferredActivities"
-        multiple
-        value={formData.preferredActivities}
-        onChange={(e) => {
-          const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-          handleCategoryChange(selectedOptions);
-        }}
-      >
-        {categories.map((category) => (
-          <option key={category.id} value={category.name}>
-            {category.name}
-          </option>
-        ))}
-      </select>
+      <Select
+        isMulti
+        options={categoryOptions}
+        value={categoryOptions.filter(option => formData.preferredActivities.includes(option.value))}
+        onChange={handleSelectChange}
+        placeholder="Preferred activities (All by default)"
+        closeMenuOnSelect={false} // Allow multiple selections
+        noOptionsMessage={() => 'No categories available'}
+        isClearable
+      />
     </div>
   );
 };
