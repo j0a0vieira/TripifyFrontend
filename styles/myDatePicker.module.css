@@ -1,0 +1,23 @@
+/* Customize the input field */
+.custom-datepicker {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  /* Customize the calendar pop-up */
+  .custom-popper .react-datepicker {
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-popper .react-datepicker__day--selected {
+    background-color: #4caf50; /* Your custom selected color */
+    color: white;
+  }
+  
+  .custom-popper .react-datepicker__day--today {
+    font-weight: bold;
+    border: 1px solid #4caf50; /* Your custom today's date color */
+  }
+  

@@ -29,8 +29,10 @@ const DestinationButton = ({ location }) => {
 };
 
 const DynamicMap = ({ locations }) => {
-  const center = locations.length ? [locations[0].latitude, locations[0].longitude] : [0, 0];
-  const zoom = locations.length ? 12 : 6;
+  // Set default coordinates for the map if locations is null or empty
+  const defaultCenter = [38.7169, -9.1399]; // Default coordinates (e.g., Lisbon, Portugal)
+  const center = locations && locations.length ? [locations[0].latitude, locations[0].longitude] : defaultCenter;
+  const zoom = locations && locations.length ? 12 : 6;
 
   const createIcon = (iconUrl, stopNumber) => {
     return L.divIcon({
@@ -50,7 +52,7 @@ const DynamicMap = ({ locations }) => {
   return (
     <MapContainer center={center} zoom={zoom} className={styles.mapContainer}>
       <TileLayer
-        url="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGlvZ29sZW9uYXJkbyIsImEiOiJjbTNrcnZsMDEwaW9iMmxwZW1mZDhybnRzIn0.o3zaq7mYrcXG3bgiGMORdg"
+        url="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGlvZ29sZW9uYXJkbyIsImEiOiJjbTNrcnZsMDEwaW9iMmxwZW1mZDhybnRzIn0.o3zaq7mYrcXG3bgiGMORdg"
         attribution='&copy; Tripify Planner'
       />
 
