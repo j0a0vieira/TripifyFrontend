@@ -49,16 +49,18 @@ export default function TripifyLanding() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('User Preferences:', formData);
+  
     // Call the fetchTripRoute function
     await fetchTripRoute(formData); // Manually triggers the fetch when the form is submitted
-    //sessionStorage.setItem('tripInfo', JSON.stringify(response.data));
-
-    // Redirect to the /trip page
-    //window.location.href = '/trip';
-    await console.log("tripInfo file landing:\n" + tripInfo);
-    await sessionStorage.setItem('data', tripInfo);
-    await router.push('/trip'); 
   };
+  
+  useEffect(() => {
+    if (tripInfo) {
+      // Only redirect when tripInfo is populated
+      sessionStorage.setItem('data', JSON.stringify(tripInfo));
+      router.push('/trip'); // Redirect to /trip page
+    }
+  }); // Runs whenever tripInfo changes
 
   // Function to update the preferredActivities from the Categories component
   const handleCategoryChange = (selectedCategories) => {
