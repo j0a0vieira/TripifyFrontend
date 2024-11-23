@@ -24,7 +24,7 @@ const useFetchTripRoute = (tripData) => {
           },
         }
       );
-
+      console.log("response from api:\n" + JSON.stringify(response.data));
       setTripInfo(response.data); // Save the response data
     } catch (error) {
       console.log("error:\n" + error);

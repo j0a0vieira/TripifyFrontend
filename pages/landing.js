@@ -7,6 +7,7 @@ import React from 'react';
 import Categories from "../components/Categories";
 import useFetchTripRoute from '../utils/useFetchTripRoute';
 import TextBoxComponent from '../components/inputTags';
+import { useRouter } from 'next/navigation';
 
 // Dynamically import MapContainer to ensure it's only loaded client-side
 const MapContainer = dynamic(
@@ -43,13 +44,20 @@ export default function TripifyLanding() {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
-
+  const router = useRouter()
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('User Preferences:', formData);
     // Call the fetchTripRoute function
-    fetchTripRoute(); // Manually triggers the fetch when the form is submitted
+    await fetchTripRoute(formData); // Manually triggers the fetch when the form is submitted
+    //sessionStorage.setItem('tripInfo', JSON.stringify(response.data));
+
+    // Redirect to the /trip page
+    //window.location.href = '/trip';
+    await console.log("tripInfo file landing:\n" + tripInfo);
+    await sessionStorage.setItem('data', tripInfo);
+    await router.push('/trip'); 
   };
 
   // Function to update the preferredActivities from the Categories component
