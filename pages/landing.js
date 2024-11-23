@@ -34,7 +34,7 @@ export default function TripifyLanding() {
     BackHome: false,
   });
 
-  const { tripInfo, loading, error } = useFetchTripRoute(formData);
+  const { tripInfo, loading, error, fetchTripRoute } = useFetchTripRoute(formData);
   
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,8 +48,8 @@ export default function TripifyLanding() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('User Preferences:', formData);
-    // No need to call fetchTripRoute here since it's already handled by the hook
-    console.log("form data: " + tripInfo);
+    // Call the fetchTripRoute function
+    fetchTripRoute(); // Manually triggers the fetch when the form is submitted
   };
 
   // Function to update the preferredActivities from the Categories component
