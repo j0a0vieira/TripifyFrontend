@@ -23,7 +23,7 @@ export default function TripifyLanding() {
     BackHome: false,
   });
 
-  const { tripInfo, loading, error, fetchTripRoute } = useFetchTripRoute(formData);
+  const { tripInfo, loading, fetchTripRoute } = useFetchTripRoute(formData);
 
   const router = useRouter()
   // Handle form submission
@@ -213,7 +213,7 @@ export default function TripifyLanding() {
             {/* Use Categories component and pass the category change handler */}
           <Categories onCategoryChange={handleCategoryChange} />
           </div>
-          <h5>It's mandatory to visit...</h5>
+          <h5>Its mandatory to visit...</h5>
           <TextBoxComponent onMandatoriesChange={handleMandatoriesChange} />
           <div class="d-flex">
             <input type="checkbox" name="backToStart" value={formData.BackHome} onChange={handleBachHomeChange} class="me-2" style={{width: "1.2rem"}} /> 
