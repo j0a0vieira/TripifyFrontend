@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import Map from '../components/map';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS globally
 import styles from '../styles/trip.module.css';
-import { useRouter } from 'next/navigation';
 
 const Trip = () => {
-  const router = useRouter();
-  const [tripInfo, setTripInfo] = useState(null);
   const [locations, setLocations] = useState([]);
   const [otherTrips, setOtherTrips] = useState([]); // State for other trips
   const [selectedTrip, setSelectedTrip] = useState(null); // State for the currently selected trip
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     // Retrieve data from sessionStorage
@@ -19,10 +18,8 @@ const Trip = () => {
     if (data) {
       // Parse the stored data and set it to state
       const parsedData = JSON.parse(data);
-      setTripInfo(parsedData.trips[0]); // Store the first trip as tripInfo
-
-      // with session variables create the starting point fixed
     
+      // Create the fixed starting point using session variables
       const initialLocation = {
         country: 'PT',
         formattedAddress: '',
@@ -34,20 +31,46 @@ const Trip = () => {
         postcode: null,
         region: null,
       };
-      // Retrieve places from parsed data
+
+      // Function to format a date to yyyy-mm-dd
+      function formatDate(dateString) {
+        const date = new Date(dateString); // Convert the date string to a Date object
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+      }
+
+      // Retrieve dates from session storage and format them
+      const startingDate = formatDate(sessionStorage.getItem('startingDate'));
+      const endingDate = formatDate(sessionStorage.getItem('endingDate'));
+
+      // Set the formatted dates to state
+      setStartDate(startingDate);
+      setEndDate(endingDate);
+    
+      // Retrieve places from parsed data for the first trip
       const places = parsedData.trips[0].places || [];
-
-      // Merge initialLocation as the first item in the array
+    
+      // Merge initialLocation as the first item in the array for the first trip
       const combinedLocations = [initialLocation, ...places];
-
-      // Calculate locations for the first trip
-      const firstTripLocations = combinedLocations;
-      setLocations(firstTripLocations); // Update locations state for the first trip
-
-      // Store the rest of the trips in a separate state
-      const remainingTrips = parsedData.trips.slice(1); // Exclude the first trip
-      setOtherTrips(remainingTrips); // Set the other trips
+      setLocations(combinedLocations); // Update locations state for the first trip
+    
+      // Modify each remaining trip to add the initialLocation as the first item
+      const updatedRemainingTrips = parsedData.trips.slice(1).map((trip) => {
+        // Merge initialLocation with the current trip's places
+        const updatedPlaces = [initialLocation, ...trip.places];
+        return {
+          ...trip,
+          places: updatedPlaces,
+        };
+      });
+    
+      // Store the updated remaining trips in a separate state
+      setOtherTrips(updatedRemainingTrips);
     }
+    
   }, []); // Empty dependency array ensures this runs once after component mounts
 
   // Handle toggling between trips
@@ -58,23 +81,18 @@ const Trip = () => {
     // zoom out and center in the map
   };
 
-  // Handle toggling off the selected trip (deselecting)
-  const handleDeselectTrip = () => {
-    setSelectedTrip(null);
-    setLocations([]); // Clear locations if no trip is selected
-  };
-
   console.log("locations:\n", locations); // Log locations to verify
   console.log("otherTrips:\n", otherTrips); // Log other trips to verify
   console.log("selectedTrip:\n", selectedTrip); // Log selected trip to verify
 
   return (
     <div className={styles.container}>
-      
-
       {/* Section for displaying other trips */}
       <div className={styles.otherTrips}>
-        <h5>Other Trips</h5>
+        <div class="d-flex justify-content-between">
+          <h3>Available Trips</h3>
+          <h5>{startDate} --- {endDate}</h5>
+        </div>
         {otherTrips.length > 0 && (
           <ul>
             {otherTrips.map((trip, index) => (

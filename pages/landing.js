@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
@@ -9,18 +9,7 @@ import useFetchTripRoute from '../utils/useFetchTripRoute';
 import TextBoxComponent from '../components/inputTags';
 import { useRouter } from 'next/navigation';
 
-// Dynamically import MapContainer to ensure it's only loaded client-side
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false } // Disable server-side rendering for this component
-);
-
 const StaticMap = dynamic(() => import('../components/staticMap'), { ssr: false });
-
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
 
 export default function TripifyLanding() {
   const [formData, setFormData] = useState({
@@ -37,13 +26,6 @@ export default function TripifyLanding() {
 
   const { tripInfo, loading, error, fetchTripRoute } = useFetchTripRoute(formData);
   
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
-  };
   const router = useRouter()
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -60,6 +42,8 @@ export default function TripifyLanding() {
       sessionStorage.setItem('data', JSON.stringify(tripInfo));
       sessionStorage.setItem('startingLat', formData.StartingLat);
       sessionStorage.setItem('startingLon', formData.StartingLon);
+      sessionStorage.setItem('startingDate', formData.StartDate);
+      sessionStorage.setItem('endingDate', formData.EndDate);
       router.push('/trip'); // Redirect to /trip page
     }
   }); // Runs whenever tripInfo changes
@@ -76,7 +60,7 @@ export default function TripifyLanding() {
 
   // Function to update the backHome from the checkbox
   const handleBachHomeChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { checked } = e.target;
     setFormData({ ...formData, BackHome: checked });
   };
 
@@ -91,9 +75,9 @@ export default function TripifyLanding() {
     </button>
   ));
 
-  const [coordinates, setCoordinates] = useState(null); // State to hold lat and lon
-  const [startingPoint, setStartingPoint] = useState(null);
-  const [destinationPoint, setDestinationPoint] = useState(null);
+  //const [coordinates, setCoordinates] = useState(null); // State to hold lat and lon
+  //const [startingPoint, setStartingPoint] = useState(null);
+  //const [destinationPoint, setDestinationPoint] = useState(null);
   const [buttonStartText, setButtonStartText] = useState('At'); // Initial button text
   const [buttonDestinationText, setButtonDestinationText] = useState('Going To'); // Initial button text
   const [type, setType] = useState('start'); // Initial button text
@@ -101,14 +85,14 @@ export default function TripifyLanding() {
 
   const setLocation = (lat, lon) => {
     if (type === 'start') {
-      setStartingPoint([lat, lon]);
+      //setStartingPoint([lat, lon]);
       setFormData({ ...formData, StartingLat: lat, StartingLon: lon });
       reverseGeocode(lat, lon).then((locality) => {
         setButtonStartText(locality);
       });
       lockMap();
     } else {
-      setDestinationPoint([lat, lon]);
+      //setDestinationPoint([lat, lon]);
       setFormData({ ...formData, DestinationLat: lat, DestinationLon: lon });
       reverseGeocode(lat, lon).then((locality) => {
          setButtonDestinationText(locality);
@@ -243,8 +227,7 @@ export default function TripifyLanding() {
       </div>
     </div>
   );
-}
-
+};
 
 // Inline CSS styles
 const styles = {

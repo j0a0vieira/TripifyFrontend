@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // You can override this CSS for custom styles
 import styles from "../styles/myDatePicker.module.css"; // Import your custom styles
 
-function myDatePicker() {
+function MyDatePicker() {
   const [formData, setFormData] = useState({
     startDate: null,
   });
-
-  const styles = {
-    select: {
-      // Your custom styles for the input field
-    },
-  };
 
   return (
     <DatePicker
@@ -26,4 +20,4 @@ function myDatePicker() {
   );
 }
 
-export default myDatePicker;
+export default MyDatePicker;*/
