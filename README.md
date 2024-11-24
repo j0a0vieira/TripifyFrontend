@@ -5,6 +5,8 @@ Desenvolvido por João Vieira e Diogo Leonardo, este projeto visa fornecer aos u
 O frontend foi desenvolvido em Next.js, com recurso a uma API de um serviço chamado MapBox que faz a gestão do mapa.
 O frontend permite escolher um local de inicio, de destino e algumas user preferences que são depois enviadas para o backend onde é possivel gerar uma lista de locais a visitar, com alguma filtragem inicial, entre esses pontos selecionados.
 
+URL: (not working correctly) https://happy-rock-092183b03.5.azurestaticapps.net/landing
+
 Como correr o projeto:
 
 1 - npm install
