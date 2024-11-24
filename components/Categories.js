@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useFetchCategories from '../utils/useFetchCategories'; // Import the custom hook
 import Select from 'react-select'; // Import react-select
 
-const Categories = ({}) => {
+const Categories = ({onCategoryChange}) => {
   const [formData, setFormData] = useState({
     preferredActivities: [], // This will hold the IDs of selected categories
   });
@@ -19,6 +19,7 @@ const Categories = ({}) => {
   // Handle changes in selected options
   const handleSelectChange = (selectedOptions) => {
     const selectedCategories = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    onCategoryChange(selectedCategories);
     setFormData((prevData) => ({
       ...prevData,
       preferredActivities: selectedCategories,

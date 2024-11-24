@@ -58,6 +58,8 @@ export default function TripifyLanding() {
     if (tripInfo) {
       // Only redirect when tripInfo is populated
       sessionStorage.setItem('data', JSON.stringify(tripInfo));
+      sessionStorage.setItem('startingLat', formData.StartingLat);
+      sessionStorage.setItem('startingLon', formData.StartingLon);
       router.push('/trip'); // Redirect to /trip page
     }
   }); // Runs whenever tripInfo changes

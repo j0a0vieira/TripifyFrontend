@@ -1,24 +1,21 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
-export default function TextBoxComponent({onChange }) {
+const TextBoxComponent = ({ onMandatoriesChange }) => {
   const [text, setText] = useState("");
   const [textList, setTextList] = useState([]);
 
-  // Notify the parent whenever textList changes
-  useEffect(() => {
-    if (onChange) {
-      onChange(textList);
-    }
-  }, [textList, onChange]);
-
   // Function to handle adding a new item when Enter is pressed
-  const handleKeyPress = (e) => {
+  const handleKeyPress = async (e) => {
     if (e.key === "Enter" && text.trim()) {
       e.preventDefault(); // Prevent default Enter action
       setTextList([...textList, text]);
       setText(""); // Clear the input
     }
   };
+
+  useEffect(() => {
+    onMandatoriesChange(textList);
+  }, [textList]);
 
   // Function to handle removing an item from the list
   const handleRemoveItem = (indexToRemove) => {
@@ -57,4 +54,6 @@ export default function TextBoxComponent({onChange }) {
       </div>
     </div>
   );
-}
+};
+
+export default TextBoxComponent;

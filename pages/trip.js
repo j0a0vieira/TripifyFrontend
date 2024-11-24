@@ -21,8 +21,27 @@ const Trip = () => {
       const parsedData = JSON.parse(data);
       setTripInfo(parsedData.trips[0]); // Store the first trip as tripInfo
 
+      // with session variables create the starting point fixed
+    
+      const initialLocation = {
+        country: 'PT',
+        formattedAddress: '',
+        id: '1',
+        latitude: sessionStorage.getItem('startingLat'),
+        locality: null,
+        longitude: sessionStorage.getItem('startingLon'),
+        name: 'Starting Point', 
+        postcode: null,
+        region: null,
+      };
+      // Retrieve places from parsed data
+      const places = parsedData.trips[0].places || [];
+
+      // Merge initialLocation as the first item in the array
+      const combinedLocations = [initialLocation, ...places];
+
       // Calculate locations for the first trip
-      const firstTripLocations = parsedData.trips[0].places;
+      const firstTripLocations = combinedLocations;
       setLocations(firstTripLocations); // Update locations state for the first trip
 
       // Store the rest of the trips in a separate state
