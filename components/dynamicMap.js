@@ -65,7 +65,7 @@ const DynamicMap = ({ locations }) => {
           <Popup className={styles.customPopup}>
             <div>
               <h3>{location.name}</h3>
-              <img src="./background.png" alt={location.name} className={styles.locationImage} />
+              <image src="./background.png" alt={location.name} className={styles.locationImage} />
               {location.formattedAddress && <p><strong>Endereço:</strong> {location.formattedAddress}</p>}
             </div>
           </Popup>

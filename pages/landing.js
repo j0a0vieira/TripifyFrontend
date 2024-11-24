@@ -9,9 +9,7 @@ import useFetchTripRoute from '../utils/useFetchTripRoute';
 import TextBoxComponent from '../components/inputTags';
 import { useRouter } from 'next/navigation';
 
-const StaticMap = dynamic(() => import('../components/staticMap'), { ssr: false });
-
-export default function TripifyLanding() {
+const TripifyLanding = () => {
   const [formData, setFormData] = useState({
     StartingLat: 0,
     StartingLon: 0,
@@ -24,7 +22,9 @@ export default function TripifyLanding() {
     BackHome: false,
   });
 
-  const { tripInfo, loading, error, fetchTripRoute } = useFetchTripRoute(formData);
+  const StaticMap = dynamic(() => import('../components/staticMap'), { ssr: false });
+
+  const { tripInfo, loading, fetchTripRoute } = useFetchTripRoute(formData);
   
   const router = useRouter()
   // Handle form submission
@@ -64,7 +64,7 @@ export default function TripifyLanding() {
     setFormData({ ...formData, BackHome: checked });
   };
 
-  const CustomDateButton = React.forwardRef(({ value, onClick, defaultText}, ref) => (
+  const CustomDateButton = React.forwardRef(({ value, onClick, defaultText }, ref) => (
     <button
       type="button"
       onClick={onClick}
@@ -214,7 +214,7 @@ export default function TripifyLanding() {
             {/* Use Categories component and pass the category change handler */}
           <Categories onCategoryChange={handleCategoryChange} />
           </div>
-          <h5>It's mandatory to visit...</h5>
+          <h5>Its mandatory to visit...</h5>
           <TextBoxComponent onMandatoriesChange={handleMandatoriesChange} />
           <div class="d-flex">
             <input type="checkbox" name="backToStart" value={formData.BackHome} onChange={handleBachHomeChange} class="me-2" style={{width: "1.2rem"}} /> 
@@ -323,3 +323,5 @@ const styles = {
   },
   
 };
+
+export default TripifyLanding;
