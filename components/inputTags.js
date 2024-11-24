@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 const TextBoxComponent = ({ onMandatoriesChange }) => {
   const [text, setText] = useState("");
@@ -15,7 +15,7 @@ const TextBoxComponent = ({ onMandatoriesChange }) => {
 
   useEffect(() => {
     onMandatoriesChange(textList);
-  }, [textList, onMandatoriesChange]);
+  }, [textList]);
 
   // Function to handle removing an item from the list
   const handleRemoveItem = (indexToRemove) => {

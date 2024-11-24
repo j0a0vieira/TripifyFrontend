@@ -9,7 +9,8 @@ import useFetchTripRoute from '../utils/useFetchTripRoute';
 import TextBoxComponent from '../components/inputTags';
 import { useRouter } from 'next/navigation';
 
-const TripifyLanding = () => {
+const StaticMap = dynamic(() => import('../components/staticMap'), { ssr: false });
+export default function TripifyLanding() {
   const [formData, setFormData] = useState({
     StartingLat: 0,
     StartingLon: 0,
@@ -22,20 +23,18 @@ const TripifyLanding = () => {
     BackHome: false,
   });
 
-  const StaticMap = dynamic(() => import('../components/staticMap'), { ssr: false });
+  const { tripInfo, loading, error, fetchTripRoute } = useFetchTripRoute(formData);
 
-  const { tripInfo, loading, fetchTripRoute } = useFetchTripRoute(formData);
-  
   const router = useRouter()
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('User Preferences:', formData);
-  
+
     // Call the fetchTripRoute function
     await fetchTripRoute(formData); // Manually triggers the fetch when the form is submitted
   };
-  
+
   useEffect(() => {
     if (tripInfo) {
       // Only redirect when tripInfo is populated
@@ -64,7 +63,7 @@ const TripifyLanding = () => {
     setFormData({ ...formData, BackHome: checked });
   };
 
-  const CustomDateButton = React.forwardRef(({ value, onClick, defaultText }, ref) => (
+  const CustomDateButton = React.forwardRef(({ value, onClick, defaultText}, ref) => (
     <button
       type="button"
       onClick={onClick}
@@ -145,17 +144,17 @@ const TripifyLanding = () => {
 
   const reverseGeocode = async (lat, lng) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=pk.eyJ1IjoiZGlvZ29sZW9uYXJkbyIsImEiOiJjbTNrcnZsMDEwaW9iMmxwZW1mZDhybnRzIn0.o3zaq7mYrcXG3bgiGMORdg`;
-  
+
     try {
       const response = await fetch(url);
       const data = await response.json();
-      
+
       if (data && data.features && data.features.length > 0) {
         // Look for a feature with a type 'place' (usually city or town)
         const placeFeature = data.features.find(feature => 
           feature.place_type.includes('place') || feature.place_type.includes('locality')
         );
-  
+
         // If a locality is found, return its text (name), otherwise fallback to place_name
         if (placeFeature) {
           return placeFeature.text; // Returns only the locality name
@@ -214,7 +213,7 @@ const TripifyLanding = () => {
             {/* Use Categories component and pass the category change handler */}
           <Categories onCategoryChange={handleCategoryChange} />
           </div>
-          <h5>Its mandatory to visit...</h5>
+          <h5>It's mandatory to visit...</h5>
           <TextBoxComponent onMandatoriesChange={handleMandatoriesChange} />
           <div class="d-flex">
             <input type="checkbox" name="backToStart" value={formData.BackHome} onChange={handleBachHomeChange} class="me-2" style={{width: "1.2rem"}} /> 
@@ -321,7 +320,5 @@ const styles = {
     // disable the map inteteraction
     pointerEvents: 'none',
   },
-  
-};
 
-export default TripifyLanding;
+};
